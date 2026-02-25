@@ -1,44 +1,29 @@
 pipeline {
   agent none
-
   stages {
-
     stage('Back-end') {
       agent {
         docker { image 'maven:3.8.1-adoptopenjdk-11' }
       }
       steps {
         sh 'mvn --version'
-        dir('backend') {
+        dir('Part-2/backend') {
           sh 'mvn compile'
           sh 'mvn exec:java -Dexec.mainClass="com.example.App"'
         }
       }
     }
-
     stage('Front-end') {
       agent {
         docker { image 'node:16-alpine' }
       }
       steps {
         sh 'node --version'
-        dir('frontend') {
+        dir('Part-2/frontend') {
           sh 'npm install'
           sh 'node index.js'
         }
       }
     }
-
   }
 }
-```
-
----
-
-## ✅ Expected Jenkins Console Output
-```
-[Back-end]  Apache Maven 3.8.1 ...
-[Back-end]  Hello World from Java Backend!
-
-[Front-end] v16.x.x
-[Front-end] Hello World from Node Frontend!
